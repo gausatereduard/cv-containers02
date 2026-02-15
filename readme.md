@@ -9,21 +9,27 @@
 ### Установка и запуск проекта
 
 1. В консоли создайте в папке containers02 образ диска для виртуальной машины размером 8 ГБ, формата qcow2, используя утилиту qemu-img:
+
     `qemu-img create -f qcow2 debian.qcow2 8G`
+
 2. Установите ОС Debian на виртуальную машину. Для этого выполните команду:
+
     `qemu-system-x86_64 -hda debian.qcow2 -cdrom dvd/debian.iso -boot d -m 2G`
 
     > Образ скачал отсюда [get.debian.org](https://get.debian.org/images/archive/12.13.0/amd64/iso-cd/)
 
 3. При установке используйте следующие параметры:
-    Имя компьютера: `debian`;
-    Хостовое имя: `debian.localhost`;
-    Имя пользователя: `user`;
-    Пароль пользователя: `password`;
+
+    - Имя компьютера: `debian`;
+    - Хостовое имя: `debian.localhost`;
+    - Имя пользователя: `user`;
+    - Пароль пользователя: `password`;
+
 4. Для повторного запуска виртуальной машины выполните команду:
+
     `qemu-system-x86_64 -hda debian.qcow2 -m 2G -smp 2 -device e1000,netdev=net0 -netdev user,id=net0,hostfwd=tcp::1080-:80,hostfwd=tcp::1022-:22`
-    или
-    `./start.sh`
+
+    или `./start.sh`
 
     Чтобы подключиться по SSH с основного хоста, используем `ssh user@localhost -p 1022`
 5. Установите LAMP в виртуальной машине. Для этого переключитесь на суперпользователя и выполните команды:
@@ -44,12 +50,16 @@
     - mariadb-client - Клиент для подключения к MariaDB;
     - unzip - Утилита для распаковки ZIP-архивов;
 6. Скачайте СУБД PhpMyAdmin:
+
     `wget https://files.phpmyadmin.net/phpMyAdmin/5.2.2/phpMyAdmin-5.2.2-all-languages.zip`
+
 7. Скачайте CMS WordPress:
+
     `wget https://wordpress.org/latest.zip`
+
 8. Проверьте наличие файлов командой `ls -l` и Распакуйте скачанные файлы в папки:
-    1. СУБД PhpMyAdmin ==> `/var/www/phpmyadmin`;
-    2. CMS WordPress ==> `/var/www/wordpress`;
+    - СУБД PhpMyAdmin ==> `/var/www/phpmyadmin`;
+    - CMS WordPress ==> `/var/www/wordpress`;
 
     ```bash
     mkdir /var/www
@@ -60,6 +70,7 @@
     ```
 
 9. Создайте через командную строку для CMS базу данных wordpress_db и пользователя базы данных с вашим именем:
+
     `mysql -u root`
 
     ```sql
@@ -71,6 +82,7 @@
     ```
 
 10. В папке `/etc/apache2/sites-available` создайте файл `01-phpmyadmin.conf`
+
     `nano /etc/apache2/sites-available/01-phpmyadmin.conf`
 
     ```apacheconf
@@ -100,12 +112,18 @@
     ```
 
 11. Зарегистрируйте конфигурации, выполнив команды:
-    `/usr/sbin/a2ensite 01-phpmyadmin`
-    `/usr/sbin/a2ensite 02-wordpress`
+
+    ```bash
+    /usr/sbin/a2ensite 01-phpmyadmin
+    /usr/sbin/a2ensite 02-wordpress
+    ```
 
 12. Добавьте в файл /etc/hosts строки:
-    `127.0.0.1 phpmyadmin.localhost`
-    `127.0.0.1 wordpress.localhost`
+
+    ```bash
+    127.0.0.1 phpmyadmin.localhost
+    127.0.0.1 wordpress.localhost
+    ```
 
 =-=-=-=-=
 
@@ -121,6 +139,7 @@
 
 2. Перезагрузите Apache Web Server.
     > Как перезагрузить Apache Web Server?
+
     `systemctl restart apache2`
 
 3. В браузере проверьте доступность сайтов <http://wordpress.localhost:1080> и <http://phpmyadmin.localhost:1080>. Завершите установку сайтов.
@@ -144,10 +163,10 @@
     1. Создаем новый конфиг файл `/etc/mysql/conf.d/port.cnf`;
     2. Прописываем новый порт в конфиге:
 
-    ```conf
-    [mysqld]
-    port = 3307
-    ```
+        ```conf
+        [mysqld]
+        port = 3307
+        ```
 
 - Какие преимущества, с вашей точки зрения, даёт виртуализация?
 
