@@ -10,11 +10,15 @@
 
 1. В консоли создайте в папке containers02 образ диска для виртуальной машины размером 8 ГБ, формата qcow2, используя утилиту qemu-img:
 
-    `qemu-img create -f qcow2 debian.qcow2 8G`
+    ```
+    qemu-img create -f qcow2 debian.qcow2 8G
+    ```
 
 2. Установите ОС Debian на виртуальную машину. Для этого выполните команду:
 
-    `qemu-system-x86_64 -hda debian.qcow2 -cdrom dvd/debian.iso -boot d -m 2G`
+    ```bash
+    qemu-system-x86_64 -hda debian.qcow2 -cdrom dvd/debian.iso -boot d -m 2G
+    ```
 
     > Образ скачал отсюда [get.debian.org](https://get.debian.org/images/archive/12.13.0/amd64/iso-cd/)
 
@@ -27,7 +31,9 @@
 
 4. Для повторного запуска виртуальной машины выполните команду:
 
-    `qemu-system-x86_64 -hda debian.qcow2 -m 2G -smp 2 -device e1000,netdev=net0 -netdev user,id=net0,hostfwd=tcp::1080-:80,hostfwd=tcp::1022-:22`
+    ```bash
+    qemu-system-x86_64 -hda debian.qcow2 -m 2G -smp 2 -device e1000,netdev=net0 -netdev user,id=net0,hostfwd=tcp::1080-:80,hostfwd=tcp::1022-:22
+    ```
 
     или `./start.sh`
 
@@ -51,11 +57,15 @@
     - unzip - Утилита для распаковки ZIP-архивов;
 6. Скачайте СУБД PhpMyAdmin:
 
-    `wget https://files.phpmyadmin.net/phpMyAdmin/5.2.2/phpMyAdmin-5.2.2-all-languages.zip`
+    ```bash
+    wget https://files.phpmyadmin.net/phpMyAdmin/5.2.2/phpMyAdmin-5.2.2-all-languages.zip
+    ```
 
 7. Скачайте CMS WordPress:
 
-    `wget https://wordpress.org/latest.zip`
+    ```bash
+    wget https://wordpress.org/latest.zip
+    ```
 
 8. Проверьте наличие файлов командой `ls -l` и Распакуйте скачанные файлы в папки:
     - СУБД PhpMyAdmin ==> `/var/www/phpmyadmin`;
@@ -71,7 +81,9 @@
 
 9. Создайте через командную строку для CMS базу данных wordpress_db и пользователя базы данных с вашим именем:
 
-    `mysql -u root`
+    ```bash
+    mysql -u root
+    ```
 
     ```sql
     CREATE DATABASE wordpress_db;
@@ -83,7 +95,9 @@
 
 10. В папке `/etc/apache2/sites-available` создайте файл `01-phpmyadmin.conf`
 
-    `nano /etc/apache2/sites-available/01-phpmyadmin.conf`
+    ```bash
+    nano /etc/apache2/sites-available/01-phpmyadmin.conf
+    ```
 
     ```apacheconf
     <VirtualHost *:80>
@@ -98,7 +112,9 @@
 
     В папке `/etc/apache2/sites-available` создайте файл `02-wordpress.conf`
 
-    `nano /etc/apache2/sites-available/02-wordpress.conf`
+    ```bash
+    nano /etc/apache2/sites-available/02-wordpress.conf
+    ```
 
     ```apacheconf
     <VirtualHost *:80>
@@ -140,7 +156,9 @@
 2. Перезагрузите Apache Web Server.
     > Как перезагрузить Apache Web Server?
 
-    `systemctl restart apache2`
+    ```bash
+    systemctl restart apache2
+    ```
 
 3. В браузере проверьте доступность сайтов <http://wordpress.localhost:1080> и <http://phpmyadmin.localhost:1080>. Завершите установку сайтов.
 
